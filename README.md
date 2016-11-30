@@ -1,4 +1,5 @@
 # message-catalog
+[![Build Status](https://travis-ci.org/IBM/message-catalog-manager.svg)](https://travis-ci.org/IBM/message-catalog-manager)
 
 ## Overview
 Support for message catalogs, including:
