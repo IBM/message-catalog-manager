@@ -1,0 +1,28 @@
+{
+  "0001": {
+    "message": "This is an example message",
+    "action": "Write a real message",
+    "url": "https://github.com/IBM/message-catalog-manager/README.md"
+  },
+  "0002": {
+    "message": "This is an example message with a special insert {id}",
+    "action": "Write a real message",
+    "detail": "detail detail detail {id}",
+    "url": "https://github.com/IBM/message-catalog-manager/README.md"
+  },
+  "0003": {
+    "message": "This is an example message with positional inserts {0} {1} {2}",
+    "action": "Write a real message",
+    "url": "https://github.com/IBM/message-catalog-manager/README.md"
+  },
+  "0004": {
+    "message": "This is a message only in the default catalog",
+    "action": "Write a real message",
+    "url": "https://github.com/IBM/message-catalog-manager/README.md"
+  },
+  "0005": {
+  },
+  "0006": {
+    "message": "This is an example message with no action"
+  }
+}

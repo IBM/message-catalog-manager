@@ -1,0 +1,74 @@
+{
+  "extends": "eslint:recommended",
+  // Environments that we run in
+  "env": {
+    "node": true,
+    "mocha": true,
+    "es6": true
+  },
+  // Additional rules for firefly project
+  "rules": {
+    "no-console": "off",
+    "array-bracket-spacing": [
+      "error",
+      "never"
+    ],
+    "dot-notation": "error",
+    "indent": [
+      "error",
+      4,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "max-len": [
+      "error",
+      1000,
+      {
+        "ignoreComments": true
+      }
+    ],
+    "new-cap": [
+      "error",
+      {
+        "capIsNewExceptions": [
+          "Router"
+        ]
+      }
+    ],
+    "no-floating-decimal": "error",
+    "no-lonely-if": "error",
+    "no-spaced-func": "error",
+    "no-throw-literal": "error",
+    "no-trailing-spaces": "error",
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": false
+      }
+    ],
+    "no-useless-call": "error",
+    "no-with": "error",
+    "operator-linebreak": [
+      "error",
+      "after"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "strict": [
+      "error",
+      "global"
+    ],
+    "valid-jsdoc": [
+      "error",
+      {
+        "requireReturn": false
+      }
+    ],
+    "no-eval": "error",
+    "no-implied-eval": "error",
+    "no-tabs": "error"
+  }
+}

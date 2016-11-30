@@ -1,0 +1,14 @@
+{
+  "exampleLocal": {
+    "url": "file://./catalogs/example/messages.json"
+  },
+  "exampleRemote": {
+    "url": "http://hostname:port/catalogs/example/messages.json"
+  },
+  "exampleInvalidPath": {
+    "url": "invalid://hostname:port/catalogs/example/messages.json"
+  },
+  "exampleInvalidEntry": {
+    "url": {}
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "0001": {
+    "message": "This is an example message for japanese catalog",
+    "action": "Write a real message",
+    "url": "https://github.com/IBM/message-catalog-manager/README.md"
+  },
+  "0002": {
+    "message": "This is an example message with a special insert {id}, in japanese locale",
+    "action": "Write a real message",
+    "url": "https://github.com/IBM/message-catalog-manager/README.md"
+  },
+  "0003": {
+    "message": "This is an example message with positional inserts {0} {1} {2}, in japanese locale",
+    "action": "Write a real message",
+    "url": "https://github.com/IBM/message-catalog-manager/README.md"
+  }
+}
