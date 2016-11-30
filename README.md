@@ -1,5 +1,6 @@
 # message-catalog
 [![Build Status](https://travis-ci.org/IBM/message-catalog-manager.svg)](https://travis-ci.org/IBM/message-catalog-manager)
+[![Coverage Status](https://coveralls.io/repos/github/IBM/message-catalog-manager/badge.svg?branch=master)](https://coveralls.io/github/IBM/message-catalog-manager?branch=master)
 
 ## Overview
 Support for message catalogs, including:
