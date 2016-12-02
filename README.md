@@ -1,4 +1,4 @@
-# message-catalog
+# message-catalog-manager
 [![Build Status](https://travis-ci.org/IBM/message-catalog-manager.svg)](https://travis-ci.org/IBM/message-catalog-manager)
 [![Coverage Status](https://coveralls.io/repos/github/IBM/message-catalog-manager/badge.svg?branch=master)](https://coveralls.io/github/IBM/message-catalog-manager?branch=master)
 
@@ -21,10 +21,14 @@ For an example of the catalog index fileformat see:
 [catalog-index.json](test/catalogs/example/index.js)  
 
 ### Using messageCatalogManager
+```js
 var MessageCatalogManager = require("message-catalog").messageCatalogManager;
 var catalogManager = new MessageCatalogManager("/catalog-index.json");
 var formattedMessage = catalogManager.getMessage("catalog1", "0001", {}, ["myapp"]);
+```
 
 ### Using catalogedError
+```js
 var CatalogedError = require("message-catalog").catalogedError;
 var throw new CatalogedError("0001", "An error occurred", ["myapp"], "catalog1");
+```
