@@ -106,6 +106,16 @@ describe('MessageCatalogManager', function () {
             var test = function() { MC.getMessage("wibble", "invalid_message"); };
             expect(test).to.throw(Error, /Catalog wibble not found/);
         });
+        it('returns a combined notification context object if message.context exists', function() {
+            var message = MC.getMessage("exampleLocal", "0007", {foo:"bar"}, {}, "en");
+            console.log(JSON.stringify(message));
+            expect(message.context).to.deep.equal({foo:"bar",contextKey:"contextValue"});
+        });
+        it('returns notification context object if message.context does not exists', function() {
+            var message = MC.getMessage("exampleLocal", "0001", {foo:"bar"}, {}, "en");
+            console.log(JSON.stringify(message));
+            expect(message.context).to.deep.equal({foo:"bar"});
+        });
 
     });
 
