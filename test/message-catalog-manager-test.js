@@ -112,7 +112,8 @@ describe('MessageCatalogManager', function () {
             expect(message.namedInserts).to.deep.equal({key:"value",foo:"bar"});
         });
         it('converts the value of message.namedInserts to string if it is another type', function() {
-            var message = MC.getMessage("exampleLocal", "0007", {foo:23},{},"en", 1);
+            var testObj = {foo:23};
+            var message = MC.getMessage("exampleLocal", "0007", testObj,{},"en", 1);
             console.log(JSON.stringify(message));
             expect(message.namedInserts).to.deep.equal({key:"value",foo:"23"});
         });
