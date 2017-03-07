@@ -29,8 +29,8 @@
     "message": "This is a message only in the default catalog",
     "action": "Write a real message",
     "url": "https://github.com/IBM/message-catalog-manager/README.md",
-    "context": {
-      "contextKey": "contextValue"
+    "namedInserts": {
+      "key": "value"
     }
   }
 }

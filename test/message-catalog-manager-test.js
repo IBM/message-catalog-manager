@@ -85,9 +85,9 @@ describe('MessageCatalogManager', function () {
             expect(message.message).to.equal("This is an example message with positional inserts 1 2 three");
         });
         it('returns a resolved message with [positional inserts in a different locale', function () {
-            var message = MC.getMessage("exampleLocal", "0003", {}, ["ein", "2", "drei"], "de");
+            var message = MC.getMessage("exampleLocal", "0003", {}, ["eins", "2", "drei"], "de");
             console.log(JSON.stringify(message));
-            expect(message.message).to.equal("This is an example message with positional inserts ein 2 drei, in german locale");
+            expect(message.message).to.equal("This is an example message with positional inserts eins 2 drei, in german locale");
         });
         it('returns a resolved message with [positional inserts in the default locale if the given one does not exist', function () {
             var message = MC.getMessage("exampleLocal", "0003", {}, ["one", "2", "three"], "ro");
@@ -106,16 +106,27 @@ describe('MessageCatalogManager', function () {
             var test = function() { MC.getMessage("wibble", "invalid_message"); };
             expect(test).to.throw(Error, /Catalog wibble not found/);
         });
-        it('returns a combined notification context object if message.context exists', function() {
-            var message = MC.getMessage("exampleLocal", "0007", {foo:"bar"}, {}, "en");
+        it('returns additional information (namedInserts) if verbose option is set', function () {
+            var message =  MC.getMessage("exampleLocal", "0007", {foo:"bar"},{},"en", 1);
             console.log(JSON.stringify(message));
-            expect(message.context).to.deep.equal({foo:"bar",contextKey:"contextValue"});
+            expect(message.namedInserts).to.deep.equal({key:"value",foo:"bar"});
         });
-        it('returns notification context object if message.context does not exists', function() {
-            var message = MC.getMessage("exampleLocal", "0001", {foo:"bar"}, {}, "en");
+        it('converts the value of message.namedInserts to string if it is another type', function() {
+            var message = MC.getMessage("exampleLocal", "0007", {foo:23},{},"en", 1);
             console.log(JSON.stringify(message));
-            expect(message.context).to.deep.equal({foo:"bar"});
+            expect(message.namedInserts).to.deep.equal({key:"value",foo:"23"});
         });
+        it('returns a combined notification context object if message.namedInserts exists', function() {
+            var message = MC.getMessage("exampleLocal", "0007", {foo:"bar"}, {}, "en", 1);
+            console.log(JSON.stringify(message));
+            expect(message.namedInserts).to.deep.equal({foo:"bar",key:"value"});
+        });
+        it('returns notification context object if message.namedInserts does not exists', function() {
+            var message = MC.getMessage("exampleLocal", "0001", {foo:"bar"}, {}, "en", 1);
+            console.log(JSON.stringify(message));
+            expect(message.namedInserts).to.deep.equal({foo:"bar"});
+        });
+
 
     });
 
