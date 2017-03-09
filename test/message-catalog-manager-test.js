@@ -111,11 +111,9 @@ describe('MessageCatalogManager', function () {
             console.log(JSON.stringify(message));
             expect(message.namedInserts).to.deep.equal({key:"value",foo:"bar"});
         });
-        it('converts the value of message.namedInserts to string if it is another type', function() {
-            var testObj = {foo:23};
-            var message = MC.getMessage("exampleLocal", "0007", testObj,{},"en", 1);
-            console.log(JSON.stringify(message));
-            expect(message.namedInserts).to.deep.equal({key:"value",foo:"23"});
+        it('throws an error if the value of namedInserts is not a string', function() {
+            var test = function () {MC.getMessage("exampleLocal", "0007", {foo:23},{},"en", 1);};
+            expect(test).to.throw(Error, /namedInserts value: 'foo' must be of type string/);
         });
         it('returns a combined notification context object if message.namedInserts exists', function() {
             var message = MC.getMessage("exampleLocal", "0007", {foo:"bar"}, {}, "en", 1);
