@@ -3,13 +3,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/IBM/message-catalog-manager/badge.svg?branch=master)](https://coveralls.io/github/IBM/message-catalog-manager?branch=master)
 
 ## Overview
-Support for message catalogs, including:
-- catalog index
-- remote and local catalogs
-- message lookup from a catalog
-- NLS bundles
-- message inserts
-- catloggedError class that carries catalog message context information
+
+This module provides a mechanism for translating messages to provide user readable information. Messages support named and positional inserts to give context to the messages. Messages can include messages and actions, as well as urls for more information. A catloggedError class carries catalog message context information so errors thrown around a system can be translated at the appropriate point.
 
 ### Catalog file format
 The catalog manager works with a set of json message catalog files contain message text.  
