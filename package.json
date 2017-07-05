@@ -1,6 +1,6 @@
 {
   "name": "message-catalog-manager",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "message catalog manager",
   "engines": {
     "node": "4.4",
@@ -29,6 +29,7 @@
     "chai-as-promised": "^5.1.0",
     "coveralls": "^2.11.15",
     "eslint": "^3.9.1",
+    "express": "^4.15.3",
     "istanbul": "^0.3.22",
     "mocha": "^2.3.3",
     "sinon": "^1.17.2",
