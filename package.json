@@ -32,7 +32,8 @@
     "express": "^4.15.3",
     "istanbul": "^0.3.22",
     "mocha": "^2.3.3",
-    "sinon": "^1.17.2",
+    "node-mocks-http": "^1.6.4",
+    "sinon": "^2.3.6",
     "sinon-chai": "^2.8.0"
   },
   "readmeFilename": "README.md"
