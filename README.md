@@ -30,7 +30,7 @@ var throw new CatalogedError("0001", "catalog1", "An error occurred", ["myapp"])
 
 ## Express Middleware
 
-If your Express application generates or receives a `catalogedError` you can use the `CatalogedErrorFormatter` middleware to intercept all responses and attempt to format error responses before they are sent.
+If your Express application generates or receives a `catalogedError` you can use the `ErrorFormattingMiddleware` middleware to intercept all responses and attempt to format error responses before they are sent.
 
 ```js
 app.use(new ErrorFormattingMiddleware('catalog-index.json'));
