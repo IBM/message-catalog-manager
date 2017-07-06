@@ -163,7 +163,7 @@ describe('MessageCatalogManager', function () {
         it('returns a message error with inserts', function() {
             var messageText = "Test Error with inserts {0} {1} {2} {3}";
             var messageInserts = [1,2,3,4];
-            var catalogedError = new CatalogedError('0003','exampleLocal', messageText,messageInserts);
+            var catalogedError = new CatalogedError('0003','exampleLocal', messageText,{},messageInserts);
             var message = MC.getCatalogedErrorMessage(catalogedError);
             expect(message.message).to.equal("This is an example message with positional inserts 1 2 3");
         });

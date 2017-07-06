@@ -11,12 +11,12 @@
 let express = require('express');
 let app = express();
 let CatalogedError = require('../../index.js').catalogedError;
-let CatalogedErrorFormatter = require('../../index.js').catalogedErrorFormatter;
+let ErrorFormattingMiddleware = require('../../index.js').errorFormattingMiddleware;
 
-app.use(new CatalogedErrorFormatter(__dirname + '/../../test/catalog-index.json'));
+app.use(new ErrorFormattingMiddleware(__dirname + '/../../test/catalog-index.json'));
 
 app.get('/*', function (req, res) {
-    let exampleError = new CatalogedError('0002','exampleLocal','Example error',[],{id:"EXAMPLE ID"});
+    let exampleError = new CatalogedError('0002','exampleLocal','Example error',{id:"EXAMPLE ID"},[]);
     res.status(400).send(exampleError);
 });
 

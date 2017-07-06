@@ -16,16 +16,16 @@ describe('catalogedError testcases', function () {
 
     it('with all parameters supplied', function (done) {
         var messageText = "Test Error";
-        var messageInserts = [1,2,3,4];
+        var messagePositionalInserts = [1,2,3,4];
         var catalog = "my-cat";
         var messageNamedInserts = {SOME:"VALUE"};
         try {
-            throw new CatalogedError("1",catalog,messageText,messageInserts,messageNamedInserts);
+            throw new CatalogedError("1",catalog,messageText,messageNamedInserts,messagePositionalInserts);
         }
         catch (err){
             expect(err).to.be.an.instanceof(Error);
             expect(err).to.be.an.instanceof(CatalogedError);
-            assert.isArray(err.inserts,"Inserts should be an array");
+            assert.isArray(err.positionalInserts,"positionalInserts should be an array");
             assert.isDefined(err.messageNumber,"messageNumber should be defined");
             assert.isObject(err.namedInserts,"namedInserts should be defined");
             expect(err.messageNumber).to.equal("1");
@@ -44,7 +44,8 @@ describe('catalogedError testcases', function () {
         catch (err){
             expect(err).to.be.an.instanceof(Error);
             expect(err).to.be.an.instanceof(CatalogedError);
-            assert.isArray(err.inserts,"Inserts should be an array");
+            assert.isArray(err.positionalInserts,"positionalInserts should be an array");
+            assert.isObject(err.namedInserts,"namedInserts should be an object");
             assert.isDefined(err.messageNumber,"messageNumber should be defined");
             expect(err.messageNumber).to.equal("DEFAULT");
             expect(err.message).to.equal(messageText);
