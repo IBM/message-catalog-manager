@@ -25,5 +25,18 @@ var formattedMessage = catalogManager.getMessage("catalog1", "0001", {}, ["myapp
 ### Using catalogedError
 ```js
 var CatalogedError = require("message-catalog").catalogedError;
-var throw new CatalogedError("0001", "An error occurred", ["myapp"], "catalog1");
+var throw new CatalogedError("0001", "catalog1", "An error occurred", ["myapp"]);
+```
+
+## Express Middleware
+
+If your Express application generates or receives a `catalogedError` you can use the `ErrorFormattingMiddleware` middleware to intercept all responses and attempt to format error responses before they are sent.
+
+```js
+app.use(new ErrorFormattingMiddleware('catalog-index.json'));
+```
+
+There is a simple application that always responds with a `catalogedError` in [example](/example). Start it like 
+```
+node example/errorMiddlewareApp/errorMiddlewareApp.js
 ```

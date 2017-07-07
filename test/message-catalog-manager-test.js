@@ -155,16 +155,17 @@ describe('MessageCatalogManager', function () {
     describe('getCatalogedErrorMessage', function () {
         it('returns a message error without inserts', function() {
             var messageText = "Test Error";
-            var catalogedError = new CatalogedError(1, messageText);
+            var catalogedError = new CatalogedError('0001','exampleLocal', messageText);
             var message = MC.getCatalogedErrorMessage(catalogedError);
-            expect(message).to.equal(messageText);
+            expect(message.message).to.equal('This is an example message');
+            expect(message.action).to.equal('Write a real message');
         });
         it('returns a message error with inserts', function() {
             var messageText = "Test Error with inserts {0} {1} {2} {3}";
             var messageInserts = [1,2,3,4];
-            var catalogedError = new CatalogedError(1, messageText, messageInserts);
+            var catalogedError = new CatalogedError('0003','exampleLocal', messageText,{},messageInserts);
             var message = MC.getCatalogedErrorMessage(catalogedError);
-            expect(message).to.equal("Test Error with inserts 1 2 3 4");
+            expect(message.message).to.equal("This is an example message with positional inserts 1 2 3");
         });
     });
 
