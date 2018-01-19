@@ -55,14 +55,14 @@ describe('MessageCatalogManager', function () {
             expect(message.message).to.equal("This is a message only in the default catalog");
         });
         it('returns a resolved message with special {id} insert in the default locale', function () {
-            var message = MC.getMessage("exampleLocal", "0002", {id:"test-id"}, []);
+            var message = MC.getMessage("exampleLocal", "0002", {id:"test-id", number: 0, boolean: true}, []);
             console.log(JSON.stringify(message));
-            expect(message.message).to.equal("This is an example message with a special insert test-id");
+            expect(message.message).to.equal("This is an example message with a special insert test-id 0 true");
         });
         it('returns a resolved message with special {id} insert in english locale', function () {
-            var message = MC.getMessage("exampleLocal", "0002", {id:"test-id-en"}, [], "en");
+            var message = MC.getMessage("exampleLocal", "0002", {id:"test-id-en", number: 1, boolean: false}, [], "en");
             console.log(JSON.stringify(message));
-            expect(message.message).to.equal("This is an example message with a special insert test-id-en");
+            expect(message.message).to.equal("This is an example message with a special insert test-id-en 1 false");
         });
         it('returns a resolved message with special {id} insert in a different locale', function () {
             var message = MC.getMessage("exampleLocal", "0002", {id:"test-id-de"}, [], "de");
@@ -70,19 +70,19 @@ describe('MessageCatalogManager', function () {
             expect(message.message).to.equal("This is an example message with a special insert test-id-de, in german locale");
         });
         it('returns a resolved message with special {id} insert in the default locale if the given one does not exist', function () {
-            var message = MC.getMessage("exampleLocal", "0002", {id:"test-id-ro"}, [], "ro");
+            var message = MC.getMessage("exampleLocal", "0002", {id:"test-id-ro", number: 1, boolean: false}, [], "ro");
             console.log(JSON.stringify(message));
-            expect(message.message).to.equal("This is an example message with a special insert test-id-ro");
+            expect(message.message).to.equal("This is an example message with a special insert test-id-ro 1 false");
         });
         it('returns a resolved message with [positional inserts in the default locale', function () {
-            var message = MC.getMessage("exampleLocal", "0003", {}, ["one", "2", "three"]);
+            var message = MC.getMessage("exampleLocal", "0003", {}, ["one", 2, "three", true]);
             console.log(JSON.stringify(message));
-            expect(message.message).to.equal("This is an example message with positional inserts one 2 three");
+            expect(message.message).to.equal("This is an example message with positional inserts one 2 three true");
         });
         it('returns a resolved message with [positional inserts in english locale', function () {
-            var message = MC.getMessage("exampleLocal", "0003", {}, ["1", "2", "three"], "en");
+            var message = MC.getMessage("exampleLocal", "0003", {}, [1, 2, "three", true], "en");
             console.log(JSON.stringify(message));
-            expect(message.message).to.equal("This is an example message with positional inserts 1 2 three");
+            expect(message.message).to.equal("This is an example message with positional inserts 1 2 three true");
         });
         it('returns a resolved message with [positional inserts in a different locale', function () {
             var message = MC.getMessage("exampleLocal", "0003", {}, ["eins", "2", "drei"], "de");
@@ -90,9 +90,9 @@ describe('MessageCatalogManager', function () {
             expect(message.message).to.equal("This is an example message with positional inserts eins 2 drei, in german locale");
         });
         it('returns a resolved message with [positional inserts in the default locale if the given one does not exist', function () {
-            var message = MC.getMessage("exampleLocal", "0003", {}, ["one", "2", "three"], "ro");
+            var message = MC.getMessage("exampleLocal", "0003", {}, ["one", "2", "three", true], "ro");
             console.log(JSON.stringify(message));
-            expect(message.message).to.equal("This is an example message with positional inserts one 2 three");
+            expect(message.message).to.equal("This is an example message with positional inserts one 2 three true");
         });
         it('throws if message not matched in a valid catalog', function () {
             var test = function() { MC.getMessage("exampleLocal", "invalid_message"); };
@@ -113,8 +113,14 @@ describe('MessageCatalogManager', function () {
         });
         it('throws an error if the value of namedInserts is not a string, a number or a boolean', function() {
             var test = function () {MC.getMessage("exampleLocal", "0007", {foo:{}},{},"en", 1);};
-            expect(test).to.throw(Error, /namedInserts value: 'foo' must be of type string/);
+            expect(test).to.throw(Error, /namedInserts value: 'foo' must be of type string, number or boolean/);
         });
+
+        it('throws an error if the value of positionalInserts is not a string, a number or a boolean', function() {
+            var test = function () {MC.getMessage("exampleLocal", "0007", {},[{}],"en", 1);};
+            expect(test).to.throw(Error, /positionalInserts value with index: '0' must be of type string, number or boolean/);
+        });
+
         it('returns a combined notification context object if message.namedInserts exists', function() {
             var message = MC.getMessage("exampleLocal", "0007", {foo:"bar", boo: true, num: 0}, {}, "en", 1);
             console.log(JSON.stringify(message));
@@ -161,20 +167,20 @@ describe('MessageCatalogManager', function () {
             expect(message.action).to.equal('Write a real message');
         });
         it('returns a message error with inserts', function() {
-            var messageText = "Test Error with inserts {0} {1} {2} {3}";
-            var messageInserts = [1,2,3,4];
+            var messageText = "Test Error with inserts {0} {1} {2} {3} {4}";
+            var messageInserts = [1,2,3,4,5];
             var catalogedError = new CatalogedError('0003','exampleLocal', messageText,{},messageInserts);
             var message = MC.getCatalogedErrorMessage(catalogedError);
-            expect(message.message).to.equal("This is an example message with positional inserts 1 2 3");
+            expect(message.message).to.equal("This is an example message with positional inserts 1 2 3 4");
         });
         it('tolerates V0 style errors', function() {
-            var messageText = "Test Error with inserts {0} {1} {2} {3}";
-            var messageInserts = [1,2,3,4];
+            var messageText = "Test Error with inserts {0} {1} {2} {3} {4}";
+            var messageInserts = [1,2,3,4,5];
             var catalogedError = new CatalogedError('0003','exampleLocal', messageText,{},messageInserts);
             catalogedError.inserts = catalogedError.positionalInserts;
             catalogedError.positionalInserts = undefined;
             var message = MC.getCatalogedErrorMessage(catalogedError);
-            expect(message.message).to.equal("This is an example message with positional inserts 1 2 3");
+            expect(message.message).to.equal("This is an example message with positional inserts 1 2 3 4");
         });
     });
 
