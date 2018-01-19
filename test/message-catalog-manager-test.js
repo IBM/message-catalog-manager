@@ -111,14 +111,14 @@ describe('MessageCatalogManager', function () {
             console.log(JSON.stringify(message));
             expect(message.namedInserts).to.deep.equal({key:"value",foo:"bar"});
         });
-        it('throws an error if the value of namedInserts is not a string', function() {
-            var test = function () {MC.getMessage("exampleLocal", "0007", {foo:23},{},"en", 1);};
+        it('throws an error if the value of namedInserts is not a string, a number or a boolean', function() {
+            var test = function () {MC.getMessage("exampleLocal", "0007", {foo:{}},{},"en", 1);};
             expect(test).to.throw(Error, /namedInserts value: 'foo' must be of type string/);
         });
         it('returns a combined notification context object if message.namedInserts exists', function() {
-            var message = MC.getMessage("exampleLocal", "0007", {foo:"bar"}, {}, "en", 1);
+            var message = MC.getMessage("exampleLocal", "0007", {foo:"bar", boo: true, num: 0}, {}, "en", 1);
             console.log(JSON.stringify(message));
-            expect(message.namedInserts).to.deep.equal({foo:"bar",key:"value"});
+            expect(message.namedInserts).to.deep.equal({foo:"bar",boo: true, num: 0, key:"value"});
         });
         it('returns notification context object if message.namedInserts does not exists', function() {
             var message = MC.getMessage("exampleLocal", "0001", {foo:"bar"}, {}, "en", 1);
