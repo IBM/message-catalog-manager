@@ -5,13 +5,13 @@
     "url": "https://github.com/IBM/message-catalog-manager/README.md"
   },
   "0002": {
-    "message": "This is an example message with a special insert {id}",
+    "message": "This is an example message with a special insert {id} {number} {boolean}",
     "action": "Write a real message",
     "detail": "detail detail detail {id}",
     "url": "https://github.com/IBM/message-catalog-manager/README.md"
   },
   "0003": {
-    "message": "This is an example message with positional inserts {0} {1} {2}",
+    "message": "This is an example message with positional inserts {0} {1} {2} {3}",
     "action": "Write a real message",
     "url": "https://github.com/IBM/message-catalog-manager/README.md"
   },
