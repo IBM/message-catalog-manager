@@ -40,3 +40,15 @@ There is a simple application that always responds with a `catalogedError` in [e
 ```
 node example/errorMiddlewareApp/errorMiddlewareApp.js
 ```
+
+## Release Notes
+
+**v1.0.0**  
+
+- Initial release
+
+**v2.0.0**
+
+- Positional and named inserts can now be of type: undefined and object, in addition to string, number, boolean  
+  Objects and arrays will be stringified with the normal `toString()` 
+- `catalogedError` constructor will throw for unsupported insert types
