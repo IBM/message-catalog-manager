@@ -54,4 +54,48 @@ describe('catalogedError testcases', function () {
             done();
         }
     });
+
+    it('constructor throws on unsupported named insert parameter', function () {
+        function createBadCatalogedError() {
+            var messageText = "Test Error";
+            var messagePositionalInserts = [1,2,3,4];
+            var catalog = "my-cat";
+            var messageNamedInserts = 'bad'; // should be object
+            new CatalogedError("1", catalog, messageText, messageNamedInserts, messagePositionalInserts);
+        }
+        expect(createBadCatalogedError).throws("named inserts must be an object if defined");
+    });
+
+    it('constructor throws on unsupported named insert type', function () {
+        function createBadCatalogedError() {
+            var messageText = "Test Error";
+            var messagePositionalInserts = [1,2,3,4];
+            var catalog = "my-cat";
+            var messageNamedInserts = {badInsert: function(){}};
+            new CatalogedError("1", catalog, messageText, messageNamedInserts, messagePositionalInserts);
+        }
+        expect(createBadCatalogedError).throws("namedInserts 'badInsert' is of unsupported type function");
+    });
+
+    it('constructor throws on unsupported positional insert parameter', function () {
+        function createBadCatalogedError() {
+            var messageText = "Test Error";
+            var messagePositionalInserts = {}; // should be array
+            var catalog = "my-cat";
+            var messageNamedInserts = {myInsert: 'myValue'};
+            new CatalogedError("1", catalog, messageText, messageNamedInserts, messagePositionalInserts);
+        }
+        expect(createBadCatalogedError).throws("positional inserts must be an array if defined");
+    });
+
+    it('constructor throws on unsupported positional insert type', function () {
+        function createBadCatalogedError() {
+            var messageText = "Test Error";
+            var messagePositionalInserts = [1,function(){},3];
+            var catalog = "my-cat";
+            var messageNamedInserts = {myInsert: 'myValue'};
+            new CatalogedError("1", catalog, messageText, messageNamedInserts, messagePositionalInserts);
+        }
+        expect(createBadCatalogedError).throws("positionalInserts value with index: '1' is of unsupported type function");
+    });
 });

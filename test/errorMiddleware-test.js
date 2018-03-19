@@ -78,7 +78,7 @@ describe('errorMiddleware', function () {
                 nextCalled = true;
             });
             assert.isTrue(nextCalled);
-            var testError = new CatalogedError('0002','exampleLocal','Example error',[],{id:"EXAMPLE ID"});
+            var testError = new CatalogedError('0002','exampleLocal','Example error',{id:"EXAMPLE ID"},[]);
             res.send(testError);
             assert(originalSendSpy.calledOnce,"Send should have been called once");
             var spyArg = originalSendSpy.getCall(0).args[0];
@@ -95,7 +95,7 @@ describe('errorMiddleware', function () {
                 nextCalled = true;
             });
             assert.isTrue(nextCalled);
-            var testError = new CatalogedError('error','error','Example error',[],{id:"EXAMPLE ID"});
+            var testError = new CatalogedError('error','error','Example error',{id:"EXAMPLE ID"},[]);
             res.send(testError);
             assert(originalSendSpy.calledOnce,"Send should have been called once");
             assert(originalSendSpy.calledOnce,"Send should have been called once");
