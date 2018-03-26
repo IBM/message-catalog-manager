@@ -31,7 +31,6 @@ describe('catalogedError testcases', function () {
             expect(err.messageNumber).to.equal("1");
             expect(err.message).to.equal(messageText);
             expect(err.catalog).to.equal(catalog);
-            console.log("Err:"+JSON.stringify(err));
             done();
         }
     });
@@ -50,7 +49,6 @@ describe('catalogedError testcases', function () {
             expect(err.messageNumber).to.equal("DEFAULT");
             expect(err.message).to.equal(messageText);
             expect(err.catalog).to.equal("DEFAULT");
-            console.log("Err:"+JSON.stringify(err));
             done();
         }
     });
