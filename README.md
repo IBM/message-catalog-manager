@@ -7,13 +7,13 @@
 This module provides a mechanism for translating messages to provide user readable information. Messages support named and positional inserts to give context to the messages. Messages can include messages and actions, as well as urls for more information. A catloggedError class carries catalog message context information so errors thrown around a system can be translated at the appropriate point.
 
 ### Catalog file format
-The catalog manager works with a set of json message catalog files contain message text.  
-These are indexed in a separate catalog index file which is provided to the catalog manager.  
+The catalog manager works with a set of json message catalog files contain message text.
+These are indexed in a separate catalog index file which is provided to the catalog manager.
 
-For an example of the catalog file format see:  
-[messages.json](test/catalogs/example/messages.json)  
-For an example of the catalog index fileformat see:  
-[catalog-index.json](test/catalogs/example/index.js)  
+For an example of the catalog file format see:
+[messages.json](test/catalogs/example/messages.json)
+For an example of the catalog index fileformat see:
+[catalog-index.json](test/catalogs/example/index.js)
 
 ### Using messageCatalogManager
 ```js
@@ -36,19 +36,30 @@ If your Express application generates or receives a `catalogedError` you can use
 app.use(new ErrorFormattingMiddleware('catalog-index.json'));
 ```
 
-There is a simple application that always responds with a `catalogedError` in [example](/example). Start it like 
+There is a simple application that always responds with a `catalogedError` in [example](/example). Start it like
 ```
 node example/errorMiddlewareApp/errorMiddlewareApp.js
 ```
 
 ## Release Notes
 
-**v1.0.0**  
+**v1.0.0**
 
 - Initial release
 
 **v2.0.0**
 
-- Positional and named inserts can now be of type: undefined and object, in addition to string, number, boolean  
-  Objects and arrays will be stringified with the normal `toString()` 
+- Positional and named inserts can now be of type: undefined and object, in addition to string, number, boolean
+  Objects and arrays will be stringified with the normal `toString()`
 - `catalogedError` constructor will throw for unsupported insert types
+
+**v2.1.0**
+
+- ErrorFormattingMiddleware supports an optional function to transform messages before formatting:
+    ```js
+    function myTransform(msg){
+      // transform msg as required
+      return msg;
+    }
+    app.use(new ErrorFormattingMiddleware('catalog-index.json', myTransform));
+    ```
