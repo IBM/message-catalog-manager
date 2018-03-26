@@ -16,10 +16,9 @@ var CatalogedError = require('../lib/catalogedError.js');
 
 describe('errorMiddleware', function () {
 
-    it('can be constructed with a catalog index', function (done) {
+    it('can be constructed with a catalog index', function () {
         var testMiddleware = new Middleware(__dirname + '/catalog-index.json');
         assert.isFunction(testMiddleware);
-        done();
     });
 
     describe('function', function () {
@@ -44,7 +43,7 @@ describe('errorMiddleware', function () {
             originalSendSpy.restore();
         });
 
-        it('does nothing for non error status codes', function (done) {
+        it('does nothing for non error status codes', function () {
             var nextCalled = false;
             testMiddleware(req,res,function(){
                 nextCalled = true;
@@ -54,11 +53,10 @@ describe('errorMiddleware', function () {
             res.send(testMessage);
             assert(originalSendSpy.calledOnce,"Send should have been called once");
             expect(originalSendSpy.getCall(0).args[0],"sent message should not have been modified").to.equal(testMessage);
-            done();
         });
 
-        it('does nothing for error status codes without a catalolgedError', function (done) {
-            res.statusCode=400;
+        it('does nothing for error status codes without a catalogedError', function () {
+            res.statusCode = 400;
             var nextCalled = false;
             testMiddleware(req,res,function(){
                 nextCalled = true;
@@ -68,11 +66,10 @@ describe('errorMiddleware', function () {
             res.send(testMessage);
             assert(originalSendSpy.calledOnce,"Send should have been called once");
             expect(originalSendSpy.getCall(0).args[0],"sent message should not have been modified").to.equal(testMessage);
-            done();
         });
 
-        it('formats the message for error status codes', function (done) {
-            res.statusCode=400;
+        it('formats the message for error status codes', function () {
+            res.statusCode = 400;
             var nextCalled = false;
             testMiddleware(req,res,function(){
                 nextCalled = true;
@@ -85,11 +82,10 @@ describe('errorMiddleware', function () {
             expect(spyArg.message,"sent message should have a message property").to.exist;
             expect(spyArg.action,"sent message should have an action property").to.exist;
             expect(spyArg.detail,"sent message should have a detail property").to.exist;
-            done();
         });
 
-        it('passes the payload through when an error occurs', function (done) {
-            res.statusCode=400;
+        it('passes the payload through when an error occurs', function () {
+            res.statusCode = 400;
             var nextCalled = false;
             testMiddleware(req,res,function(){
                 nextCalled = true;
@@ -100,7 +96,6 @@ describe('errorMiddleware', function () {
             assert(originalSendSpy.calledOnce,"Send should have been called once");
             assert(originalSendSpy.calledOnce,"Send should have been called once");
             expect(originalSendSpy.getCall(0).args[0],"sent message should not have been modified").to.equal(testError);
-            done();
         });
     });
 });
