@@ -13,6 +13,7 @@ chai.use(sinonChai);
 
 var sinon = require('sinon');
 var httpMocks = require('node-mocks-http');
+var events = require('events');
 var Middleware = require('../lib/middleware/errorMiddleware.js');
 var CatalogedError = require('../lib/catalogedError.js');
 
@@ -26,11 +27,9 @@ describe('errorMiddleware', function () {
         req = httpMocks.createRequest({
             method: 'GET',
             url: '/blah/blah',
-            params: {
-                id: 42
-            }
+            params: {id: 42}
         });
-        res = httpMocks.createResponse();
+        res = httpMocks.createResponse({eventEmitter: events.EventEmitter});
         originalSendSpy = sinon.spy(res, "send");
     });
 
@@ -103,39 +102,115 @@ describe('errorMiddleware', function () {
                 nextCalled = true;
             });
             assert.isTrue(nextCalled);
-            var testError = new CatalogedError('error','error','Example error',{id:"EXAMPLE ID"},[]);
+            var testError = new CatalogedError('missing-error-code-causes-failure','error','Example error',{id:"EXAMPLE ID"},[]);
             res.send(testError);
             assert(originalSendSpy.calledOnce,"Send should have been called once");
             assert(originalSendSpy.calledOnce,"Send should have been called once");
-            expect(originalSendSpy.getCall(0).args[0],"sent message should not have been modified").to.equal(testError);
+            expect(originalSendSpy.getCall(0).args[0],"sent message should not have been modified").to.equal(JSON.stringify(testError));
         });
     });
 
     describe('function with pre-processor', function () {
         var preProcessorStub;
+        var nextStub;
         beforeEach(function () {
             preProcessorStub = sinon.stub();
+            nextStub = sinon.stub();
             testMiddleware = new Middleware(__dirname + '/catalog-index.json', preProcessorStub);
+            res.statusCode = 400;
         });
 
-        it('calls pre-processor to transform before formatting the message', function () {
+        it('uses synchronous pre-processor to transform before formatting the message', function () {
+            // pre-processor function which runs synchronously, returning {object}
             preProcessorStub.callsFake(function(msg){
+                // clone message, and update inserts
                 var newMsg = JSON.parse(JSON.stringify(msg));
-                newMsg.namedInserts.id = 'transformed';
+                newMsg.namedInserts.id = 'transformed-sync';
                 return newMsg;
             });
-            res.statusCode = 400;
-            var nextCalled = false;
-            testMiddleware(req,res,function(){
-                nextCalled = true;
-            });
-            assert.isTrue(nextCalled);
-            var testError = new CatalogedError('0002','exampleLocal','Example error',{id:"EXAMPLE ID"},[]);
+            testMiddleware(req,res,nextStub);
+            expect(nextStub).to.have.callCount(1);
+            var testError = new CatalogedError('0002','exampleLocal','Example error',{id:"this-insert-gets-replaced"},[]);
             res.send(testError);
 
             expect(preProcessorStub).to.have.callCount(1);
+            expect(originalSendSpy).to.have.callCount(1);
             var sentFormattedMessage = originalSendSpy.getCall(0).args[0];
-            expect(sentFormattedMessage.message).to.equal('This is an example message with a special insert transformed {number} {boolean}');
+            expect(sentFormattedMessage.message).to.equal('This is an example message with a special insert transformed-sync {number} {boolean}');
         });
+
+        it('sends HTTP500 unformatted original message when synchronous pre-processor throws', function (done) {
+            // pre-processor function which runs synchronously, returning {object}
+            preProcessorStub.throws(new Error('fake error when transforming message'));
+            testMiddleware(req,res,nextStub);
+            expect(nextStub).to.have.callCount(1);
+            var testError = new CatalogedError('0002','exampleLocal','Example error',{id:"this-insert-NOT-replaced"},[]);
+
+            res.on('send', function(){
+                try {
+                    expect(preProcessorStub).to.have.callCount(1);
+                    expect(originalSendSpy).to.have.callCount(1);
+                    expect(res._getStatusCode()).to.equal(500);
+                    var sentMessage = originalSendSpy.getCall(0).args[0];
+                    expect(sentMessage).to.equal(JSON.stringify(testError));
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            });
+
+            res.send(testError);
+        });
+
+        it('uses asynchronous pre-processor to transform before formatting the message', function (done) {
+            // pre-processor function which runs asynchronously, returning {Promise<object>}
+            preProcessorStub.callsFake(function(msg){
+                // clone message, and update inserts
+                var newMsg = JSON.parse(JSON.stringify(msg));
+                newMsg.namedInserts.id = 'transformed-async';
+                return Promise.resolve(newMsg);
+            });
+            testMiddleware(req,res,nextStub);
+            expect(nextStub).to.have.callCount(1);
+            var testError = new CatalogedError('0002','exampleLocal','Example error',{id:"this-insert-gets-replaced"},[]);
+
+            res.on('send', function(){
+                try {
+                    expect(preProcessorStub).to.have.callCount(1);
+                    expect(originalSendSpy).to.have.callCount(1);
+                    var sentFormattedMessage = originalSendSpy.getCall(0).args[0];
+                    expect(sentFormattedMessage.message).to.equal('This is an example message with a special insert transformed-async {number} {boolean}');
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            });
+
+            res.send(testError);
+        });
+
+        it('sends HTP500 unformatted original message when asynchronous pre-processor rejects', function (done) {
+            // pre-processor function which runs asynchronously, returning {Promise<object>}
+            preProcessorStub.rejects(new Error('fake error when transforming message'));
+            testMiddleware(req,res,nextStub);
+            expect(nextStub).to.have.callCount(1);
+            var testError = new CatalogedError('0002','exampleLocal','Example error',{id:"this-insert-NOT-replaced"},[]);
+
+            res.on('send', function(){
+                try {
+                    expect(preProcessorStub).to.have.callCount(1);
+                    expect(originalSendSpy).to.have.callCount(1);
+                    expect(res._getStatusCode()).to.equal(500);
+                    var sentMessage = originalSendSpy.getCall(0).args[0];
+                    expect(sentMessage).to.equal(JSON.stringify(testError));
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            });
+
+            res.send(testError);
+        });
+
     });
 });

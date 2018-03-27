@@ -63,3 +63,5 @@ node example/errorMiddlewareApp/errorMiddlewareApp.js
     }
     app.use(new ErrorFormattingMiddleware('catalog-index.json', myTransform));
     ```
+  The function can be synchronous (return a transformed message object) or asynchronous (return a promise to a
+  transformed message object)
