@@ -50,11 +50,11 @@ describe('MessageCatalogManager', function () {
         });
         it('returns a resolved message with special {id} insert in the default locale', function () {
             var message = MC.getMessage("exampleLocal", "0002", {id:"test-id", number: 0, boolean: true}, []);
-            expect(message.message).to.equal("This is an example message with a special insert test-id 0 true");
+            expect(message.message).to.equal("This is an example message with special inserts test-id - 0 - true");
         });
         it('returns a resolved message with special {id} insert in english locale', function () {
             var message = MC.getMessage("exampleLocal", "0002", {id:"test-id-en", number: 1, boolean: false}, [], "en");
-            expect(message.message).to.equal("This is an example message with a special insert test-id-en 1 false");
+            expect(message.message).to.equal("This is an example message with special inserts test-id-en - 1 - false");
         });
         it('returns a resolved message with special {id} insert in a different locale', function () {
             var message = MC.getMessage("exampleLocal", "0002", {id:"test-id-de"}, [], "de");
@@ -62,11 +62,11 @@ describe('MessageCatalogManager', function () {
         });
         it('returns a resolved message with special {id} insert in the default locale if the given one does not exist', function () {
             var message = MC.getMessage("exampleLocal", "0002", {id:"test-id-ro", number: 1, boolean: false}, [], "ro");
-            expect(message.message).to.equal("This is an example message with a special insert test-id-ro 1 false");
+            expect(message.message).to.equal("This is an example message with special inserts test-id-ro - 1 - false");
         });
         it('returns a resolved message with special {id} insert for non-string values', function () {
             var message = MC.getMessage("exampleLocal", "0002", {id: null, number: NaN, boolean: undefined}, []);
-            expect(message.message).to.equal("This is an example message with a special insert null NaN undefined");
+            expect(message.message).to.equal("This is an example message with special inserts null - NaN - undefined");
         });
         it('returns a resolved message with positional inserts in the default locale', function () {
             var message = MC.getMessage("exampleLocal", "0003", {}, ["one", 2, "three", true]);

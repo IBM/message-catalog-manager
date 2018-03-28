@@ -130,13 +130,13 @@ describe('errorMiddleware', function () {
             });
             testMiddleware(req,res,nextStub);
             expect(nextStub).to.have.callCount(1);
-            var testError = new CatalogedError('0002','exampleLocal','Example error',{id:"this-insert-gets-replaced"},[]);
+            var testError = new CatalogedError('0002','exampleLocal','Example error',{id:"this-insert-gets-replaced",number:1,boolean:true},[]);
             res.send(testError);
 
             expect(preProcessorStub).to.have.callCount(1);
             expect(originalSendSpy).to.have.callCount(1);
             var sentFormattedMessage = originalSendSpy.getCall(0).args[0];
-            expect(sentFormattedMessage.message).to.equal('This is an example message with a special insert transformed-sync {number} {boolean}');
+            expect(sentFormattedMessage.message).to.equal('This is an example message with special inserts transformed-sync - 1 - true');
         });
 
         it('sends HTTP500 unformatted original message when synchronous pre-processor throws', function (done) {
@@ -172,14 +172,14 @@ describe('errorMiddleware', function () {
             });
             testMiddleware(req,res,nextStub);
             expect(nextStub).to.have.callCount(1);
-            var testError = new CatalogedError('0002','exampleLocal','Example error',{id:"this-insert-gets-replaced"},[]);
+            var testError = new CatalogedError('0002','exampleLocal','Example error',{id:"this-insert-gets-replaced",number:1,boolean:true},[]);
 
             res.on('send', function(){
                 try {
                     expect(preProcessorStub).to.have.callCount(1);
                     expect(originalSendSpy).to.have.callCount(1);
                     var sentFormattedMessage = originalSendSpy.getCall(0).args[0];
-                    expect(sentFormattedMessage.message).to.equal('This is an example message with a special insert transformed-async {number} {boolean}');
+                    expect(sentFormattedMessage.message).to.equal('This is an example message with special inserts transformed-async - 1 - true');
                     done();
                 } catch (e) {
                     done(e);
