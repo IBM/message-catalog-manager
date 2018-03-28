@@ -12,7 +12,7 @@ These are indexed in a separate catalog index file which is provided to the cata
 
 For an example of the catalog file format see:
 [messages.json](test/catalogs/example/messages.json)
-For an example of the catalog index fileformat see:
+For an example of the catalog index file format see:
 [catalog-index.json](test/catalogs/example/index.js)
 
 ### Using messageCatalogManager
