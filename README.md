@@ -56,6 +56,7 @@ node example/errorMiddlewareApp/errorMiddlewareApp.js
 **v2.1.0**
 
 - Class `CatalogedError` is exported with a capitalised class name
+- The message identifier for a `CatalogedError` instance renamed `messageCode` instead of `messageNumber` (it's type is string)
 - formattingMiddleware should be called as a function (not with `new`)
 - formattingMiddleware supports an optional function to transform messages before formatting:
     ```js

@@ -105,7 +105,6 @@ describe('formattingMiddleware', function () {
             var testError = new CatalogedError('missing-error-code-causes-failure','error','Example error',{id:"EXAMPLE ID"},[]);
             res.send(testError);
             assert(originalSendSpy.calledOnce,"Send should have been called once");
-            assert(originalSendSpy.calledOnce,"Send should have been called once");
             expect(originalSendSpy.getCall(0).args[0],"sent message should not have been modified").to.equal(JSON.stringify(testError));
         });
     });
