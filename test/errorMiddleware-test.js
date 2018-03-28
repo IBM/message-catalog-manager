@@ -14,10 +14,10 @@ chai.use(sinonChai);
 var sinon = require('sinon');
 var httpMocks = require('node-mocks-http');
 var events = require('events');
-var Middleware = require('../lib/middleware/errorMiddleware.js');
+var formattingMiddleware = require('../lib/middleware/errorMiddleware.js');
 var CatalogedError = require('../lib/catalogedError.js');
 
-describe('errorMiddleware', function () {
+describe('formattingMiddleware', function () {
 
     var testMiddleware;
     var req;
@@ -38,20 +38,20 @@ describe('errorMiddleware', function () {
     });
 
     it('can be constructed with a catalog index', function () {
-        var testMiddleware = new Middleware(__dirname + '/catalog-index.json');
+        var testMiddleware = formattingMiddleware(__dirname + '/catalog-index.json');
         assert.isFunction(testMiddleware);
     });
 
     it('can be constructed with an optional pre-processor', function() {
         function myPreProcessorFunction() {}
-        var testMiddleware = new Middleware(__dirname + '/catalog-index.json', myPreProcessorFunction);
+        var testMiddleware = formattingMiddleware(__dirname + '/catalog-index.json', myPreProcessorFunction);
         assert.isFunction(testMiddleware);
     });
 
     describe('function without pre-processor', function () {
 
         beforeEach(function () {
-            testMiddleware = new Middleware(__dirname + '/catalog-index.json');
+            testMiddleware = formattingMiddleware(__dirname + '/catalog-index.json');
         });
 
         it('does nothing for non error status codes', function () {
@@ -116,7 +116,7 @@ describe('errorMiddleware', function () {
         beforeEach(function () {
             preProcessorStub = sinon.stub();
             nextStub = sinon.stub();
-            testMiddleware = new Middleware(__dirname + '/catalog-index.json', preProcessorStub);
+            testMiddleware = formattingMiddleware(__dirname + '/catalog-index.json', preProcessorStub);
             res.statusCode = 400;
         });
 

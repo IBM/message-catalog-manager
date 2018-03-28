@@ -7,6 +7,6 @@
 
 module.exports = {
     messageCatalogManager: require('./lib/message-catalog-manager').MessageCatalogManager,
-    catalogedError: require('./lib/catalogedError.js'),
-    errorFormattingMiddleware: require('./lib/middleware/errorMiddleware.js'),
+    CatalogedError: require('./lib/catalogedError.js'),
+    formattingMiddleware: require('./lib/middleware/errorMiddleware.js'),
 };

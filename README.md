@@ -55,13 +55,15 @@ node example/errorMiddlewareApp/errorMiddlewareApp.js
 
 **v2.1.0**
 
-- ErrorFormattingMiddleware supports an optional function to transform messages before formatting:
+- Class `CatalogedError` is exported with a capitalised class name
+- formattingMiddleware should be called as a function (not with `new`)
+- formattingMiddleware supports an optional function to transform messages before formatting:
     ```js
     function myTransform(msg){
       // transform msg as required
       return msg;
     }
-    app.use(new ErrorFormattingMiddleware('catalog-index.json', myTransform));
+    app.use(messageCatalogManager.formattingMiddleware('catalog-index.json', myTransform));
     ```
   The function can be synchronous (return a transformed message object) or asynchronous (return a promise to a
   transformed message object)
