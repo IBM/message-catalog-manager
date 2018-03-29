@@ -6,7 +6,7 @@
 'use strict';
 
 module.exports = {
-    messageCatalogManager: require('./lib/message-catalog-manager').MessageCatalogManager,
-    catalogedError: require('./lib/catalogedError.js'),
-    errorFormattingMiddleware: require('./lib/middleware/errorMiddleware.js'),
+    MessageCatalogManager: require('./lib/message-catalog-manager').MessageCatalogManager,
+    CatalogedError: require('./lib/catalogedError.js'),
+    formattingMiddleware: require('./lib/middleware/errorMiddleware.js'),
 };

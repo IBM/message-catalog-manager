@@ -26,7 +26,7 @@ describe('catalogedError testcases', function () {
             expect(err).to.be.an.instanceof(Error);
             expect(err).to.be.an.instanceof(CatalogedError);
             assert.isArray(err.positionalInserts,"positionalInserts should be an array");
-            assert.isDefined(err.messageNumber,"messageNumber should be defined");
+            assert.isDefined(err.messageCode,"messageCode should be defined");
             assert.isObject(err.namedInserts,"namedInserts should be defined");
             expect(err.messageNumber).to.equal("1");
             expect(err.message).to.equal(messageText);
@@ -45,8 +45,8 @@ describe('catalogedError testcases', function () {
             expect(err).to.be.an.instanceof(CatalogedError);
             assert.isArray(err.positionalInserts,"positionalInserts should be an array");
             assert.isObject(err.namedInserts,"namedInserts should be an object");
-            assert.isDefined(err.messageNumber,"messageNumber should be defined");
-            expect(err.messageNumber).to.equal("DEFAULT");
+            assert.isDefined(err.messageCode,"messageCode should be defined");
+            expect(err.messageCode).to.equal("DEFAULT");
             expect(err.message).to.equal(messageText);
             expect(err.catalog).to.equal("DEFAULT");
             done();
@@ -95,5 +95,18 @@ describe('catalogedError testcases', function () {
             new CatalogedError("1", catalog, messageText, messageNamedInserts, messagePositionalInserts);
         }
         expect(createBadCatalogedError).throws("positionalInserts value with index: '1' is of unsupported type function");
+    });
+
+    it('has deprecated messageNumber for messageCode', function (done) {
+        var messageText = "Test Error";
+        var catalog = "my-cat";
+        try {
+            throw new CatalogedError("theMessageCode001",catalog,messageText,[], undefined);
+        }
+        catch (err){
+            expect(err.messageCode).to.equal("theMessageCode001");
+            expect(err.messageNumber).to.equal("theMessageCode001");
+            done();
+        }
     });
 });
