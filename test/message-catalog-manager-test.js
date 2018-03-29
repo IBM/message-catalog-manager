@@ -11,7 +11,7 @@ var expect = chai.expect;
 chai.use(chaiAsPromised);
 var sinonChai = require("sinon-chai");
 chai.use(sinonChai);
-var MessageCatalogManager = require("../index.js").messageCatalogManager;
+var MessageCatalogManager = require("../index.js").MessageCatalogManager;
 var CatalogedError = require('../lib/catalogedError.js');
 var messageCatLib = require("../lib/message-catalog-manager.js");
 
