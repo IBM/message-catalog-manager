@@ -15,28 +15,28 @@ For an example of the catalog file format see:
 For an example of the catalog index fileformat see:
 [catalog-index.json](test/catalogs/example/index.js)
 
-### Using messageCatalogManager
+### Using message-catalog-manager
 ```js
-var MessageCatalogManager = require("message-catalog").messageCatalogManager;
+var MessageCatalogManager = require("message-catalog-manager").MessageCatalogManager;
 var catalogManager = new MessageCatalogManager("/catalog-index.json");
 var formattedMessage = catalogManager.getMessage("catalog1", "0001", {}, ["myapp"]);
 ```
 
 ### Using catalogedError
 ```js
-var CatalogedError = require("message-catalog").catalogedError;
-var throw new CatalogedError("0001", "catalog1", "An error occurred", ["myapp"]);
+var CatalogedError = require("message-catalog").CatalogedError;
+throw new CatalogedError("0001", "catalog1", "An error occurred", ["myapp"]);
 ```
 
 ## Express Middleware
 
-If your Express application generates or receives a `catalogedError` you can use the `ErrorFormattingMiddleware` middleware to intercept all responses and attempt to format error responses before they are sent.
+If your Express application generates or receives a `CatalogedError` you can use the `formattingMiddleware` middleware to intercept all responses and attempt to format error responses before they are sent.
 
 ```js
 app.use(new ErrorFormattingMiddleware('catalog-index.json'));
 ```
 
-There is a simple application that always responds with a `catalogedError` in [example](/example). Start it like
+There is a simple application that always responds with a `CatalogedError` in [example](/example). Start it like
 ```
 node example/errorMiddlewareApp/errorMiddlewareApp.js
 ```
@@ -55,7 +55,7 @@ node example/errorMiddlewareApp/errorMiddlewareApp.js
 
 **v2.1.0**
 
-- Class `CatalogedError` is exported with a capitalised class name
+- Classes `MessageCatalogManager` and `CatalogedError` are exported with a capitalised class names
 - The message identifier for a `CatalogedError` instance renamed `messageCode` instead of `messageNumber` (it's type is string)
 - formattingMiddleware should be called as a function (not with `new`)
 - formattingMiddleware supports an optional function to transform messages before formatting:
