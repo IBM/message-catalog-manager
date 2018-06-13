@@ -139,7 +139,15 @@ describe('MessageCatalogManager', function () {
             expect(message.namedInserts).to.deep.equal({foo:"bar"});
         });
 
+        it('returns filtered inserts list when message.dataNamedInsertsPattern exists and matches', function () {
+            var message =  MC.getMessage("exampleLocal", "0008", {"user.key": "userValue","otherKey": "otherValue"},[],"en", 1);
+            expect(message.data).to.deep.equal({"user.key":"userValue"});
+        });
 
+        it('returns message without filtered inserts list when message.dataNamedInsertsPattern does not match anything', function () {
+            var message =  MC.getMessage("exampleLocal", "0008", {"otherKey": "otherValue"},[],"en", 1);
+            expect(message.data).to.equal(undefined);
+        });
     });
 
     describe('checkCatalog', function () {
