@@ -146,7 +146,12 @@ describe('MessageCatalogManager', function () {
 
         it('returns message without filtered inserts list when message.dataNamedInsertsPattern does not match anything', function () {
             var message =  MC.getMessage("exampleLocal", "0008", {"otherKey": "otherValue"},[],"en", 1);
-            expect(message.data).to.equal(undefined);
+            expect(message.data).to.deep.equal({});
+        });
+
+        it('returns builds data object applying inserts in data object descriptor', function() {
+            var message = MC.getMessage("exampleLocal", "0009", {foo:"bar", boo: true, num: 0, "user.otherKey": "value"}, [], "en", 1);
+            expect(message.data).to.deep.equal({myFOO: "BEFORE bar AFTER", myBOO: "true", "user.otherKey": "value"});
         });
     });
 

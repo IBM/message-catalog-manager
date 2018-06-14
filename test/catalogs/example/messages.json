@@ -38,5 +38,16 @@
     "action": "Write a real message",
     "url": "https://github.com/IBM/message-catalog-manager/README.md",
     "dataNamedInsertsPattern": "^(user\\.)"
+  },
+  "0009": {
+    "message": "This is an example message with special inserts {foo} - {boo} - {num}",
+    "action": "Write a real message",
+    "detail": "detail detail detail {id}",
+    "url": "https://github.com/IBM/message-catalog-manager/README.md",
+    "dataNamedInsertsPattern": "^(user\\.)",
+    "data": {
+      "myFOO": "BEFORE {foo} AFTER"  ,
+      "myBOO": "{boo}"
+    }
   }
 }
