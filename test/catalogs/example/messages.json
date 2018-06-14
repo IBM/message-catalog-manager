@@ -32,5 +32,11 @@
     "namedInserts": {
       "key": "value"
     }
+  },
+  "0008": {
+    "message": "This is a message with a pattern to select named inserts",
+    "action": "Write a real message",
+    "url": "https://github.com/IBM/message-catalog-manager/README.md",
+    "dataNamedInsertsPattern": "^(user\\.)"
   }
 }
