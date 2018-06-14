@@ -68,3 +68,9 @@ node example/errorMiddlewareApp/errorMiddlewareApp.js
     ```
   The function can be synchronous (return a transformed message object) or asynchronous (return a promise to a
   transformed message object)
+
+**v2.2.0**
+
+- `getMessage` support for returning a data object.
+   - Build data using a regex pattern matching keys in the namedInserts
+   - Build data using a static definition in the catalog entry
