@@ -109,4 +109,20 @@ describe('catalogedError testcases', function () {
             done();
         }
     });
+
+    describe('isCatalogedError', function () {
+        it('returns false if object is not a cataloged error', function () {
+            expect(CatalogedError.isCatalogedError()).to.equal(false);
+            expect(CatalogedError.isCatalogedError(null)).to.equal(false);
+            expect(CatalogedError.isCatalogedError(123)).to.equal(false);
+            expect(CatalogedError.isCatalogedError('string')).to.equal(false);
+            expect(CatalogedError.isCatalogedError({})).to.equal(false);
+            expect(CatalogedError.isCatalogedError(function () {})).to.equal(false);
+        });
+
+        it('returns true if object is a cataloged error', function () {
+            var catalogedError = new CatalogedError('0001', 'exampleLocal', 'Test Error');
+            expect(CatalogedError.isCatalogedError(catalogedError)).to.equal(true);
+        });
+    });
 });
