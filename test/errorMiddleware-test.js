@@ -102,11 +102,30 @@ describe('formattingMiddleware', function () {
                 nextCalled = true;
             });
             assert.isTrue(nextCalled);
-            var testError = new CatalogedError('missing-error-code-causes-failure','error','Example error',{id:"EXAMPLE ID"},[]);
+            var testError = new CatalogedError('MESSAGE_NOT_IN_CATALOG','error','Example error',{id:"EXAMPLE ID"},[]);
             res.send(testError);
             assert(originalSendSpy.calledOnce,"Send should have been called once");
             expect(originalSendSpy.getCall(0).args[0],"sent message should not have been modified").to.equal(JSON.stringify(testError));
         });
+
+        it('when message is not found and returns unformatted without a stack', function () {
+            res.statusCode = 400;
+            var nextCalled = false;
+            testMiddleware(req,res,function(){
+                nextCalled = true;
+            });
+            assert.isTrue(nextCalled);
+            var testError = new CatalogedError('MESSAGE_NOT_IN_CATALOG','error','Example error',{id:"EXAMPLE ID"},[]);
+            // cloning error object properties can make stack visible
+            let copyTestError  = {};
+            let testErrorProperties = Object.getOwnPropertyNames(testError);
+            testErrorProperties.forEach(property =>{
+                copyTestError[property] = testError[property];
+            });
+            res.send(copyTestError);
+            expect(originalSendSpy.getCall(0).args[0]).to.not.include('stack');
+        });
+
     });
 
     describe('function with pre-processor', function () {
@@ -161,6 +180,33 @@ describe('formattingMiddleware', function () {
             res.send(testError);
         });
 
+        it('sends unformatted message without a stack property when synchronous pre-processor throws', function (done) {
+            // pre-processor function which runs synchronously, returning {object}
+            preProcessorStub.throws(new Error('fake error when transforming message'));
+            testMiddleware(req,res,nextStub);
+            expect(nextStub).to.have.callCount(1);
+            var testError = new CatalogedError('0002','exampleLocal','Example error',{id:"this-insert-NOT-replaced"},[]);
+            // cloning error object properties can make stack visible
+            let copyTestError  = {};
+            let testErrorProperties = Object.getOwnPropertyNames(testError);
+            testErrorProperties.forEach(property =>{
+                copyTestError[property] = testError[property];
+            });
+
+            res.on('send', function(){
+                try {
+                    var sentMessage = originalSendSpy.getCall(0).args[0];
+                    expect(sentMessage).to.not.include('stack');
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            });
+
+            res.send(copyTestError);
+        });
+
+
         it('uses asynchronous pre-processor to transform before formatting the message', function (done) {
             // pre-processor function which runs asynchronously, returning {Promise<object>}
             preProcessorStub.callsFake(function(msg){
@@ -210,6 +256,33 @@ describe('formattingMiddleware', function () {
 
             res.send(testError);
         });
+
+        it('sends unformatted message without a stack property when asynchronous pre-processor rejects', function (done) {
+            // pre-processor function which runs asynchronously, returning {Promise<object>}
+            preProcessorStub.rejects(new Error('fake error when transforming message'));
+            testMiddleware(req,res,nextStub);
+            expect(nextStub).to.have.callCount(1);
+            var testError = new CatalogedError('0002','exampleLocal','Example error',{id:"this-insert-NOT-replaced"},[]);
+            // cloning error object properties can make stack visible
+            let copyTestError  = {};
+            let testErrorProperties = Object.getOwnPropertyNames(testError);
+            testErrorProperties.forEach(property =>{
+                copyTestError[property] = testError[property];
+            });
+
+            res.on('send', function(){
+                try {
+                    var sentMessage = originalSendSpy.getCall(0).args[0];
+                    expect(sentMessage).to.not.include('stack');
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            });
+
+            res.send(copyTestError);
+        });
+
 
     });
 });
