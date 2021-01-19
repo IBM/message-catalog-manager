@@ -3,8 +3,8 @@
   "version": "2.2.2",
   "description": "message catalog manager",
   "engines": {
-    "node": "4.4",
-    "npm": "3.x"
+    "node": ">=4.4",
+    "npm": ">=3.x"
   },
   "repository": {
     "type": "git",
