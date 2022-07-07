@@ -1,6 +1,6 @@
 {
   "name": "message-catalog-manager",
-  "version": "2.2.2",
+  "version": "3.0.0",
   "description": "message catalog manager",
   "engines": {
     "node": ">=14",
