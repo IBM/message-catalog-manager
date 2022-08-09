@@ -1,10 +1,10 @@
 {
   "name": "message-catalog-manager",
-  "version": "2.2.2",
+  "version": "3.0.0",
   "description": "message catalog manager",
   "engines": {
-    "node": "4.4",
-    "npm": "3.x"
+    "node": ">=14",
+    "npm": ">=6"
   },
   "repository": {
     "type": "git",
