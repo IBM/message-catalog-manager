@@ -19,7 +19,6 @@
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
-    "fs": "0.0.2",
     "underscore": "^1.8.3"
   },
   "license": "MIT",
