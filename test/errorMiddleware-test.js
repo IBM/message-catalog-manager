@@ -285,4 +285,112 @@ describe('formattingMiddleware', function () {
 
 
     });
+
+    describe('function with language parameter', function () {
+        beforeEach(function () {
+            res.statusCode = 400;
+        });
+
+        it('formats message in English when language is "en"', function () {
+            testMiddleware = formattingMiddleware(__dirname + '/catalog-index.json', null, 'en');
+            var nextCalled = false;
+            testMiddleware(req, res, function () {
+                nextCalled = true;
+            });
+            assert.isTrue(nextCalled);
+            var testError = new CatalogedError('0001', 'exampleLocal', 'Example error', {}, []);
+            res.send(testError);
+            assert(originalSendSpy.calledOnce, "Send should have been called once");
+            var spyArg = originalSendSpy.getCall(0).args[0];
+            expect(spyArg.message).to.equal('This is an example message');
+        });
+
+        it('formats message in French when language is "fr"', function () {
+            testMiddleware = formattingMiddleware(__dirname + '/catalog-index.json', null, 'fr');
+            var nextCalled = false;
+            testMiddleware(req, res, function () {
+                nextCalled = true;
+            });
+            assert.isTrue(nextCalled);
+            var testError = new CatalogedError('0001', 'exampleLocal', 'Example error', {}, []);
+            res.send(testError);
+            assert(originalSendSpy.calledOnce, "Send should have been called once");
+            var spyArg = originalSendSpy.getCall(0).args[0];
+            expect(spyArg.message).to.equal('This is an example message for french catalog');
+        });
+
+        it('formats message in German when language is "de"', function () {
+            testMiddleware = formattingMiddleware(__dirname + '/catalog-index.json', null, 'de');
+            var nextCalled = false;
+            testMiddleware(req, res, function () {
+                nextCalled = true;
+            });
+            assert.isTrue(nextCalled);
+            var testError = new CatalogedError('0002', 'exampleLocal', 'Example error', {id: 'test-id'}, []);
+            res.send(testError);
+            assert(originalSendSpy.calledOnce, "Send should have been called once");
+            var spyArg = originalSendSpy.getCall(0).args[0];
+            expect(spyArg.message).to.equal('This is an example message with a special insert test-id, in german locale');
+        });
+
+        it('formats message in Japanese when language is "jp"', function () {
+            testMiddleware = formattingMiddleware(__dirname + '/catalog-index.json', null, 'jp');
+            var nextCalled = false;
+            testMiddleware(req, res, function () {
+                nextCalled = true;
+            });
+            assert.isTrue(nextCalled);
+            var testError = new CatalogedError('0001', 'exampleLocal', 'Example error', {}, []);
+            res.send(testError);
+            assert(originalSendSpy.calledOnce, "Send should have been called once");
+            var spyArg = originalSendSpy.getCall(0).args[0];
+            expect(spyArg.message).to.equal('This is an example message for japanese catalog');
+        });
+
+        it('falls back to English when language is not available', function () {
+            testMiddleware = formattingMiddleware(__dirname + '/catalog-index.json', null, 'es');
+            var nextCalled = false;
+            testMiddleware(req, res, function () {
+                nextCalled = true;
+            });
+            assert.isTrue(nextCalled);
+            var testError = new CatalogedError('0001', 'exampleLocal', 'Example error', {}, []);
+            res.send(testError);
+            assert(originalSendSpy.calledOnce, "Send should have been called once");
+            var spyArg = originalSendSpy.getCall(0).args[0];
+            expect(spyArg.message).to.equal('This is an example message');
+        });
+
+        it('falls back to English for message not in specified language', function () {
+            testMiddleware = formattingMiddleware(__dirname + '/catalog-index.json', null, 'de');
+            var nextCalled = false;
+            testMiddleware(req, res, function () {
+                nextCalled = true;
+            });
+            assert.isTrue(nextCalled);
+            var testError = new CatalogedError('0004', 'exampleLocal', 'Example error', {}, []);
+            res.send(testError);
+            assert(originalSendSpy.calledOnce, "Send should have been called once");
+            var spyArg = originalSendSpy.getCall(0).args[0];
+            expect(spyArg.message).to.equal('This is a message only in the default catalog');
+        });
+
+        it('works with pre-processor and language parameter', function () {
+            var preProcessorStub = sinon.stub().callsFake(function (msg) {
+                var newMsg = JSON.parse(JSON.stringify(msg));
+                newMsg.namedInserts.id = 'transformed-with-lang';
+                return newMsg;
+            });
+            testMiddleware = formattingMiddleware(__dirname + '/catalog-index.json', preProcessorStub, 'de');
+            var nextStub = sinon.stub();
+            testMiddleware(req, res, nextStub);
+            expect(nextStub).to.have.callCount(1);
+            var testError = new CatalogedError('0002', 'exampleLocal', 'Example error', {id: 'original-id'}, []);
+            res.send(testError);
+            expect(preProcessorStub).to.have.callCount(1);
+            expect(originalSendSpy).to.have.callCount(1);
+            var sentFormattedMessage = originalSendSpy.getCall(0).args[0];
+            expect(sentFormattedMessage.message).to.equal('This is an example message with a special insert transformed-with-lang, in german locale');
+        });
+    });
 });

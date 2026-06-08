@@ -202,6 +202,56 @@ describe('MessageCatalogManager', function () {
             var message = MC.getCatalogedErrorMessage(catalogedError);
             expect(message.message).to.equal("This is an example message with positional inserts 1 2 3 4");
         });
+        it('returns a message in English when language is "en"', function() {
+            var messageText = "Test Error";
+            var catalogedError = new CatalogedError('0001','exampleLocal', messageText);
+            var message = MC.getCatalogedErrorMessage(catalogedError, 'en');
+            expect(message.message).to.equal('This is an example message');
+            expect(message.action).to.equal('Write a real message');
+        });
+        it('returns a message in French when language is "fr"', function() {
+            var messageText = "Test Error";
+            var catalogedError = new CatalogedError('0001','exampleLocal', messageText);
+            var message = MC.getCatalogedErrorMessage(catalogedError, 'fr');
+            expect(message.message).to.equal('This is an example message for french catalog');
+        });
+        it('returns a message in German when language is "de"', function() {
+            var messageText = "Test Error";
+            var catalogedError = new CatalogedError('0002','exampleLocal', messageText, {id: 'test-id'});
+            var message = MC.getCatalogedErrorMessage(catalogedError, 'de');
+            expect(message.message).to.equal('This is an example message with a special insert test-id, in german locale');
+        });
+        it('returns a message in Japanese when language is "jp"', function() {
+            var messageText = "Test Error";
+            var catalogedError = new CatalogedError('0001','exampleLocal', messageText);
+            var message = MC.getCatalogedErrorMessage(catalogedError, 'jp');
+            expect(message.message).to.equal('This is an example message for japanese catalog');
+        });
+        it('falls back to English when language is not available', function() {
+            var messageText = "Test Error";
+            var catalogedError = new CatalogedError('0001','exampleLocal', messageText);
+            var message = MC.getCatalogedErrorMessage(catalogedError, 'es');
+            expect(message.message).to.equal('This is an example message');
+        });
+        it('falls back to English for message not in specified language', function() {
+            var messageText = "Test Error";
+            var catalogedError = new CatalogedError('0004','exampleLocal', messageText);
+            var message = MC.getCatalogedErrorMessage(catalogedError, 'de');
+            expect(message.message).to.equal('This is a message only in the default catalog');
+        });
+        it('returns a message with inserts in specified language', function() {
+            var messageText = "Test Error with inserts";
+            var messageInserts = ['eins', '2', 'drei'];
+            var catalogedError = new CatalogedError('0003','exampleLocal', messageText, {}, messageInserts);
+            var message = MC.getCatalogedErrorMessage(catalogedError, 'de');
+            expect(message.message).to.equal("This is an example message with positional inserts eins 2 drei, in german locale");
+        });
+        it('returns a message with named inserts in specified language', function() {
+            var messageText = "Test Error with named inserts";
+            var catalogedError = new CatalogedError('0002','exampleLocal', messageText, {id: 'test-id-fr', number: 42, boolean: true});
+            var message = MC.getCatalogedErrorMessage(catalogedError, 'fr');
+            expect(message.message).to.equal('This is an example message with special inserts test-id-fr - 42 - true, in french locale');
+        });
     });
 
     describe('applyInserts', function () {
