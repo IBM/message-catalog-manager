@@ -5,7 +5,7 @@
     "url": "https://github.com/IBM/message-catalog-manager/README.md"
   },
   "0002": {
-    "message": "This is an example message with a special insert {id}, in french locale",
+    "message": "This is an example message with special inserts {id} - {number} - {boolean}, in french locale",
     "action": "Write a real message",
     "url": "https://github.com/IBM/message-catalog-manager/README.md"
   },
